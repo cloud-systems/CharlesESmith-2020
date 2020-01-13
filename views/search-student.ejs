@@ -1,217 +1,68 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-   <% include partials/head %>
-</head>
+   <head>
+      <% include partials/head %>
+   </head>
 
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+   <script>
+   </script>
 
-<script>
-   // Your web app's Firebase configuration
-   var firebaseConfig = {
-      apiKey: "<%= fbConfig.apiKey %>",
-      authDomain: "<%= fbConfig.authDomain %>",
-      databaseURL: "<%= fbConfig.databaseURL %>",
-      projectId: "<%= fbConfig.projectId %>",
-      storageBucket: "<%= fbConfig.storageBucket %>",
-      messagingSenderId: "<%= fbConfig.messagingSenderId %>",
-      appId: "<%= fbConfig.appId %>",
-   };
-   // Initialize Firebase
-   firebase.initializeApp(firebaseConfig);
-</script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script type="text/javascript">
+   </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript">
-
-   function searchNames(query, box, callback, name) { //Query delay causing error
-      clearOptions();
-      const ref = firebase.database().ref('students');
-      // If last-name button is selected
-      if($('input[name="nameType"]:checked').val() === "last"){
-         // Array to store results
-      var names = [];
-      // Firebase search by last name with partial match allowance
-      ref.orderByChild('LAST').startAt(query).endAt(query + '\uf8ff').once("value").then(function (snapshot) {
-         names = [];
-         // Populates array with results
-         snapshot.forEach(function (child) {
-            var info = [child.child("LAST").val(), child.child("FIRST").val(), child.child("MI").val(), child.key];
-            names.push(info);
-         });
-         // Async function
-      }).then(function () {
-         //debugger;
-         addOptions(names);
-
-         callback(names);
-      }, function (error) {
-         console.log("Error");
-      });
+   <style>
+      .btn-group {
+         padding-left: 10px;
+         padding-bottom: 10px;
       }
-      // Else search by first-name
-       else {
-      var firstNames = [];
-      ref.orderByChild('FIRST').startAt(query).endAt(query + '\uf8ff').once("value").then(function (snapshot) {
-         firstNames = [];
-         snapshot.forEach(function (child) {
-            var info = [child.child("LAST").val(), child.child("FIRST").val(), child.child("MI").val(), child.key];
-            firstNames.push(info);
-         });
-      }).then(function () {
-         //debugger;
-         addOptions(firstNames);
+   </style>
 
-         callback(firstNames);
-      }, function (error) {
-         console.log("Error");
-      });
-      }
-   }
-   // Handles null entries
-   function fillSelect(names) {
-      if (names.length === 0) {
-         console.log("failed");
-         alert("Name does not exist.");
-      }
-   }
-   // Function to process inputted name
-   function getName(myName, param, box) {
-      clearOptions();
-      if (!myName) {
-         return;
-      }
-      //Changes the first letter of all-lowercase entries to uppercase
-      var nameval = myName.substring(0, 1).toUpperCase() + myName.substring(1, myName.length);
-      console.log(nameval);
-      searchNames(nameval, box, fillSelect, param)
-
-   }
-      // Adds results from name search arrays and appends to dropdown
-   function addOptions(options) {
-      for (var i = 0; i < options.length; i++) {
-         var text = options[i][0] + ", " + options[i][1];
-         if (options[i][2]) {
-            text += " " + options[i][2];
-         }
-         var opt = new Option(text, options[i][3]);
-         $(opt).html(text);
-         $("#resBox").append(opt);
-      }
-   }
-
-   function clearOptions() {
-      $('#resBox')
-         .empty()
-         .append('<option style="display:none" disabled selected value>Names</option>');
-   }
-
-   $(document).ready(function () {
-      //Cursor defaults to ID box
-       $('input[name="studentID"]').focus();
-       // Student ID input field is set to the value of chosen studnet
-      $('#resBox').change(function () {
-         $('input[name="studentID"]').val($("#resBox").val());
-      });
-      $('#lastname').on("keypress", function (e) {
-         if (e.keyCode == 13) {
-            // Cancel the default action on keypress event
-            e.preventDefault();
-            searchNames(this.value, 'resBox', fillSelect);
-         }
-      });
-      
-      $('#studentID').on('keypress', function (e) {
-         // prints an alert when student ID is null
-         if (e.keyCode == 13) {
-            if (!this.value) {
-               alert('Please enter a Student ID.');
-               return;
-            }
-            document.getElementById('ticket-entry-form').submit();
-            // Cancel the default action on keypress event
-            e.preventDefault();
-         }
-      });
-      
-      $('#form-submit').on('click', function (e) {
-         e.preventDefault();
-         if (!$('#studentID').val()) {
-            alert('Please enter a Student ID.');
-            return;
-         }
-         // form submission
-         document.getElementById('ticket-entry-form').submit();
-      });
-   });
-
-</script>
-
-<style>
-
-   .btn-group{
-      padding-left: 10px;
-      padding-bottom: 10px;
-   }
-
-</style>
-
-<body>
-   <% include partials/header %>
-   <form action="/ticket-entry" id="ticket-entry-form" autocomplete="off">
-      <div class="container mt-4 animated fadeIn">
-         <div class="row">
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-6">
-               <div class="card">
-                  <div class="card-header">
-                     <div class="card-title">
-                        <h5>Search Student</h5>
+   <body>
+      <% include partials/header %>
+      <form action="/ticket-entry" id="ticket-entry-form" autocomplete="off">
+         <div class="container mt-4 animated fadeIn">
+            <div class="row">
+               <div class="col-md-3">
+               </div>
+               <div class="col-md-6">
+                  <div class="card">
+                     <div class="card-header">
+                        <div class="card-title" id="textt">
+                           <h5>Log Information</h5>
+                        </div>
+                        <div class="card-text">
+                        </div>
                      </div>
-                     <div class="card-text">
-                     </div>
-                  </div>
-                  <div class="card-body">
-                     <div class="card-text">
-                        <div class="form-group">
-                           <label>Student ID</label>
-                           <input class="form-control" id="studentID" type="number"  name="studentID">
-                        </div>
-                        <div class="form-group">
-                           <label>Name Search:</label>
-                           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                              <label class="btn btn-primary btn-sm active">
-                                 <input type="radio" name="nameType" id="last" value="last" autocomplete="off" checked> Last Name
-                              </label>
-                              <label class="btn btn-primary btn-sm">
-                                 <input type="radio" name="nameType" id="first" value="first" autocomplete="off"> First Name
-                              </label>
+                     <div class="card-body">
+                        <div class="card-text">
+                           <div class="form-group" style="margin:auto">
+                              <label>Sleep (# of hours)</label></br>
+                              <input class="number" id="sleep" type="number" name="sleep">
                            </div>
-                           <div class="input-group mb-3">
-                              <!--<input type="text" class="form-control" id="lastname" name="lastname">-->
-                              <input type="text" class="form-control" name="names" id="fn">
-                              
-                              <div class="input-group-append">
-                                 <button class="btn btn-secondary" type="button" id="firstButton"
-                                    onclick="Javascript:getName(names.value,'FIRST','resBox');"><i
-                                       class="fa fa-search fa-lg"></i></button>
-                              </div>
+                           <div class="form-group">
+                              <label>Weight (lbs)</label> </br>
+                              <input class="number" id="weight" type="number" name="weight">
                            </div>
-                        </div>
-                         <!--<Dropdown menu to be populated with name search results>-->
-                        <div class="form-group">
-                           <label>Names will appear below</label>
-                           <select id="resBox" class="names form-control" size="10">
-                              <option style="display:none" disabled selected value>Names</option>
-                           </select>
-                        </div>
-                        <div class="form-group text-center">
-                           <button class="btn btn-lg btn-secondary float-left" type="button"
-                              onclick="window.location.href='/index'"><i class="fa fa-chevron-left"></i> Back</button>
-                           <input class="btn btn-lg btn-success" id="form-submit" type="button" value="Submit">
+                           <div class="form-group">
+                              <label>Calories</label> </br>
+                              <input class="number" id="calories" type="number" name="calories">
+                           </div>
+                           <div class="form-group">
+                              <label>Exercise</label> </br>
+                              <input class="number" id="exercise" type="number" name="exercise">
+                           </div>
+                           <div style="margin-top: 30px">
+                              <button onClick="myFunction()" type="button" class="btn btn-success">Submit</button>
+                              <script>
+                                 function myFunction() {
+                                    alert("Successfully submitted")
+                                    window.location.reload();
+                                 }
+                              </script>
+
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -220,19 +71,19 @@
             <div class="col-md-3">
             </div>
          </div>
-      </div>
-   </form>
-   <!--<Sources-->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
-   integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
-      crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
-   integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
-      crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
-   integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
-      crossorigin="anonymous"></script>
+         </div>
+      </form>
+      <!--<Sources-->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+         crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+         crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+         crossorigin="anonymous"></script>
       <% include partials/validateLogin %>
-</body>
+   </body>
 
 </html>

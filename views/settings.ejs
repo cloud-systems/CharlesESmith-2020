@@ -1,255 +1,206 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-   <% include partials/head %>
-   <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+   <head>
+      <% include partials/head %>
+      <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
 
-   <script>
-      // Your web app's Firebase configuration
-      var firebaseConfig = {
-         apiKey: "AIzaSyCCgoy1_bJzrruepLYIWBbrIUIGxM-p2CQ",
-         authDomain: "signup-form-e4c78.firebaseapp.com",
-         databaseURL: "https://signup-form-e4c78.firebaseio.com",
-         projectId: "signup-form-e4c78",
-         storageBucket: "signup-form-e4c78.appspot.com",
-         messagingSenderId: "1000336889334",
-         appId: "1:1000336889334:web:f5099e3a8ecc1584"
-      };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-   </script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-   <script type="text/javascript">
-      $(document).ready(function () {
-         const database = firebase.database();
-         // Updates max capacity with value of maxCap when saveButton is clicked
-         $('#saveButton').click(() => {
-           
-            database.ref('users/user1').update({
+      <script>
+         // Your web app's Firebase configuration
+         var firebaseConfig = {
+            apiKey: "AIzaSyCCgoy1_bJzrruepLYIWBbrIUIGxM-p2CQ",
+            authDomain: "signup-form-e4c78.firebaseapp.com",
+            databaseURL: "https://signup-form-e4c78.firebaseio.com",
+            projectId: "signup-form-e4c78",
+            storageBucket: "signup-form-e4c78.appspot.com",
+            messagingSenderId: "1000336889334",
+            appId: "1:1000336889334:web:f5099e3a8ecc1584"
+         };
+         // Initialize Firebase
+         firebase.initializeApp(firebaseConfig);
+      </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script type="text/javascript">
+         $(document).ready(function () {
+            const database = firebase.database();
+            // Updates max capacity with value of maxCap when saveButton is clicked
+            $('#saveButton').click(() => {
 
-               username: $('input[id="username"]').val(),
-               password: $('input[id="password"]').val()
+               database.ref('users/user1').update({
+
+                  username: $('input[id="username"]').val(),
+                  password: $('input[id="password"]').val()
+
+               });
+               alert("Changed credentials!")
+               $('input[id="maxCap"]').val('');
+            });
+
+
+            // When reset button within modal is clicked
+            $('#reset').click(() => {
+               // Deletes the database collections indicated by checked radio button
+               if ((document.getElementById('all').checked)) {
+                  database.ref('tickets/').remove();
+                  database.ref('settings/').remove();
+                  database.ref('settings/currentNum').set("0");
+                  database.ref('settings/maxCap').set("0");
+                  database.ref('students/').remove();
+                  database.ref('obligations/').remove()
+                  database.ref('settings/currentNum').set("0");
+                  $('input[id="maxCap"]').val('');
+                  alert("Successfully reset database");
+               }
+               else if ((document.getElementById('studentsOnly').checked)) {
+
+                  database.ref('students/').remove();
+
+                  $('input[id="maxCap"]').val('');
+                  alert("Successfully reset database");
+               }
+               else if ((document.getElementById('obligationsOnly').checked)) {
+
+                  database.ref('obligations/').remove();
+
+                  $('input[id="maxCap"]').val('');
+                  alert("Successfully reset database");
+               }
+               else if ((document.getElementById('ticketsOnly').checked)) {
+
+                  database.ref('tickets/').remove();
+
+                  $('input[id="maxCap"]').val('');
+                  alert("Successfully reset database");
+               }
+               else if ((document.getElementById('settingsOnly').checked)) {
+                  database.ref('settings/currentNum').set("0");
+                  database.ref('settings/maxCap').set("0");
+
+                  $('input[id="maxCap"]').val('');
+                  alert("Successfully reset database");
+               }
+               // If no option is selected, an alert is printed
+               else {
+                  alert("Please select an option");
+               }
+
+
+
+
+
+
 
             });
-            alert("Changed credentials!")
-            $('input[id="maxCap"]').val('');
-         });
-         
-
-          // When reset button within modal is clicked
-         $('#reset').click(() => {
-            // Deletes the database collections indicated by checked radio button
-            if ((document.getElementById('all').checked)) {
-               database.ref('tickets/').remove();
-               database.ref('settings/').remove();
-               database.ref('settings/currentNum').set("0");
-               database.ref('settings/maxCap').set("0");
-               database.ref('students/').remove();
-               database.ref('obligations/').remove()
-               database.ref('settings/currentNum').set("0");
-               $('input[id="maxCap"]').val('');
-               alert("Successfully reset database");
-            }
-            else if ((document.getElementById('studentsOnly').checked)) {
-
-               database.ref('students/').remove();
-
-               $('input[id="maxCap"]').val('');
-               alert("Successfully reset database");
-            }
-            else if ((document.getElementById('obligationsOnly').checked)) {
-
-               database.ref('obligations/').remove();
-
-               $('input[id="maxCap"]').val('');
-               alert("Successfully reset database");
-            }
-            else if ((document.getElementById('ticketsOnly').checked)) {
-
-               database.ref('tickets/').remove();
-
-               $('input[id="maxCap"]').val('');
-               alert("Successfully reset database");
-            }
-            else if ((document.getElementById('settingsOnly').checked)) {
-               database.ref('settings/currentNum').set("0");
-               database.ref('settings/maxCap').set("0");
-
-               $('input[id="maxCap"]').val('');
-               alert("Successfully reset database");
-            }
-            // If no option is selected, an alert is printed
-            else {
-               alert("Please select an option");
-            }
-
-
-
-
-
 
 
          });
 
 
-      });
+      </script>
+
+   </head>
+
+   <style>
+      #maxCap {
+         max-width: 200px;
+      }
+
+      form {
+         padding-left: 10px;
+      }
+
+      .sr {
+
+         padding-top: 20px;
+      }
+
+      .files {
+         padding-top: 20px;
+      }
 
 
-   </script>
+      /* Modal Content */
+      .modal-content {
+         background-color: #fefefe;
+         margin: auto;
+         padding: 20px;
+         border: 1px solid #888;
+         width: 30%;
+      }
 
-</head>
+      /* The Close Button */
+      .close {
+         color: #aaaaaa;
+         float: right;
+         font-size: 28px;
+         font-weight: bold;
+      }
 
-<style>
-   #maxCap {
-      max-width: 200px;
-   }
-
-   form {
-      padding-left: 10px;
-   }
-
-   .sr {
-
-      padding-top: 20px;
-   }
-
-   .files {
-      padding-top: 20px;
-   }
-
-
-   /* Modal Content */
-   .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 30%;
-   }
-
-   /* The Close Button */
-   .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-   }
-
-   .close:hover,
-   .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-   }
-</style>
+      .close:hover,
+      .close:focus {
+         color: #000;
+         text-decoration: none;
+         cursor: pointer;
+      }
+   </style>
 
 
 
-<body>
-   <% include partials/header %>
-   <form>
-      <div class="container mt-4 animated fadeIn">
-         <div class="row">
-            <div class="col-md-3">
-            </div>
-            <div class="col-md-6">
-               <div class="card">
-                  <div class="card-header">
-                     <div class="card-title">
-                        <h5>Settings</h5>
-                     </div>
-                  </div>
-                  <div class="card-body">
-                     <div class="card-text">
-                        <div class="form-group">
-                           <label>Change login credentials</label>
-                           <input class="form-control"  id="username" size="5"></input>
-                           <input class="form-control"  id="password" size="5"></input>
-                        </div>
-                        <div class="form-group ">
-
-                             
-                            <!---Modal triggered by click of resetButton-->
-                           <button class="btn btn-warning" type="button" id="resetButton">Reset database</button>
-                           <!-- The Modal -->
-                           <div id="myModal" class="modal">
-
-                              <!-- Modal content -->
-                              <div class="modal-content">
-                                 <span class="close">&times;</span>
-                                 <label>Please select an option</label>
-                                 <div>
-                                    <!--radio buttons to indicate which collection(s) to delete-->
-                                    <input type="radio" name="resetIt" id="all" value="Reset all collections" />
-                                    <label> Reset all collections</label>
-                                 </div>
-                                 <div>
-                                    <input type="radio" name="resetIt" id="settingsOnly"
-                                       value="Reset settings collection" />
-                                    <label>Reset settings collection</label>
-                                 </div>
-                                 <div>
-                                    <input type="radio" name="resetIt" id="studentsOnly"
-                                       value="Reset students collection" />
-                                    <label> Reset students collection</label>
-                                 </div>
-                                 <div>
-                                    <input type="radio" name="resetIt" id="obligationsOnly"
-                                       value="Reset obligations collection" />
-                                    <label> Reset obligations collection</label>
-                                 </div>
-                                 <div>
-                                    <input type="radio" name="resetIt" id="ticketsOnly"
-                                       value="Reset obligations collection" />
-                                    <label> Reset tickets collection</label>
-                                 </div>
-                                 <button class="btn btn-warning" type="button" id="reset"> Reset </button>
-                              </div>
-
-                           </div>
-
-                           <script>
-                              // Get the modal
-                              var modal = document.getElementById("myModal");
-
-                              // Get the button that opens the modal
-                              var btn = document.getElementById("resetButton");
-
-                              // Get the <span> element that closes the modal
-                              var span = document.getElementsByClassName("close")[0];
-
-                              // When the user clicks the button, open the modal
-                              btn.onclick = function () {
-                                 modal.style.display = "block";
-                              }
-
-                              // When the user clicks on <span> (x), close the modal
-                              span.onclick = function () {
-                                 modal.style.display = "none";
-                              }
-
-                              // When the user clicks anywhere outside of the modal, close it
-                              window.onclick = function (event) {
-                                 if (event.target == modal) {
-                                    modal.style.display = "none";
-                                 }
-                              }
-                           </script>
-                        </div>
-                        <div class="form-group text-center">
-                           <button class="btn btn-lg btn-success" id="saveButton">Save</button>
-                           <a href="/" class="float-left btn-lg btn-secondary" id="backButton">Back </a>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+   <body>
+      <% include partials/header %>
+      <form>
+         <div class="container mt-4 animated fadeIn">
+            <div class="row">
                <div class="col-md-3">
                </div>
-            </div>
-         </div>
-   </form>
-   <% include partials/validateLogin %>
-</body>
+               <div class="col-md-6">
+                  <div class="card">
+                     <div class="card-header">
+                        <div class="card-title" id="textt">
+                           <h5>Settings</h5>
+                        </div>
+                     </div>
+                     <div class="card-body">
+                        <div class="card-text">
+                           <div class="form-group">
+                              <label>Gender:</label>
+                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                 <label class="btn btn-primary btn-sm active">
+                                    <input type="radio" name="nameType" id="last" value="last" autocomplete="off"
+                                       checked> Male
+                                 </label>
+                                 <label class="btn btn-primary btn-sm">
+                                    <input type="radio" name="nameType" id="first" value="first" autocomplete="off">
+                                    Female
+                                 </label>
+                              </div>
+                           </div>
+                           <div class="form-group ">
+                              <label>Age: </label>
+                              <input class="number" id="age" type="number" name="age">
+                           </div>
+                           <div class="form-group ">
+                              <label>Height (inches): </label>
+                              <input class="number" id="height" type="number" name="height">
+                           </div>
+                           <div class="form-group ">
+                              <label>Weight (lbs): </label>
+                              <input class="number" id="weight" type="number" name="weight">
+                           </div>
+                           <div class="form-group">
+                              <label>Activity Level</label>
+                              <select>
+                                 <option value="volvo">Extremely active</option>
+                                 <option value="saab">Moderately Active</option>
+                                 <option value="mercedes">Lightly Active</option>
+                                 <option value="audi">Sedentery</option>
+                              </select>
+                           </div>
+                           <div style="margin-top: 15px">
+                              <button type="button" class="btn btn-success">Save Information</button>
+                           </div>
+      </form>
+      <% include partials/validateLogin %>
+   </body>
 
 </html>

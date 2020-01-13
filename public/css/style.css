@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 }
 body{
-	background: RGB(38,38,38);
+	background: RGB(68,200,255);
 	color: #485e74;
 	line-height: 1.6;
 	font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,7 +45,7 @@ ul{
 	padding: 1em;
 }
 .company-info{
-	background: rgb(254, 212, 54);
+	background: rgb(44,141,182);
 }
 .company-info h3, .company-info ul{
 	text-align: center;
@@ -70,15 +70,15 @@ ul{
 .box {
 	margin: 10px;
 	padding: 4px;
-	border: solid 1px rgb(217, 182, 58);
-	background-color: rgb(254, 212, 54);
+	border: solid 1px rgb(68,200,255);
+	background-color: rgb(68,200,255);
 	width: 150px;
 	text-align: center;
 	float: left;
 	border-radius: 8px;
 }
 .help-icon a {
-	color: rgb(254, 212, 54);
+	color: rgb(44,141,182);
 }
 .icon {
 	color: #000;
@@ -87,14 +87,23 @@ ul{
 	margin-top: 7px;
 }
 .card {
-	border: rgb(217, 182, 58);
+	border: rgb(44,141,182);
+}
+.card-text {
+	text-align: center;
 }
 .card-header {
-	background-color: rgb(254, 212, 54);
+	background-color: rgb(44,141,182);
 }
 #firstButton {
-	background-color: rgb(254, 212, 54);
-	border: rgb(217, 182, 58);
+	background-color: rgb(44,141,182);
+	border: rgb(44,141,182);
+}
+#star-color {
+	color: #000
+}
+#textt {
+	color: rgb(255,255,255)
 }
 /*Large Screens*/
 @media(min-width: 700px){

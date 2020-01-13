@@ -27,8 +27,8 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">
-                            <h5>Upload</h5>
+                        <div class="card-title" id="textt">
+                            <h5>Score Report</h5>
                         </div>
                     </div>
                     <div class="card-body">
@@ -36,24 +36,16 @@
                             <form ref='uploadForm' id='uploadForm' action='/upload' method='post'
                                 encType="multipart/form-data">
                                 <div class="form-group">
-                                    <label>Choose the type of file you are uploading:</label>
-                                    <div>
-                                        <input type="radio" name="collectionName" value="students"> Students
-                                        <input class="ml-4" type="radio" name="collectionName" value="obligations">
-                                        Obligations
+                                    <label>Your score from (1-100) is:</label>
+                                    <div >
+                                        92/100
+                                        Continue on your current trajectory.
+                                        Try to get more hours of sleep.
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <input type="file" accept=".csv" id="csvFile" name="csvFile">
-                                </div>
-                                <div class="form-group text-center">
-                                    <button class="btn btn-lg btn-warning" type="button" id="submitBtn">Submit</button>
-                                </div>
                             </form>
-
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="md-col-3"></div>

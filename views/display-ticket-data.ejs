@@ -1,106 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- 
-<head>
-  <% include partials/head %>
-  <script>
-    function downloadCSV(csv, filename) {
-      var csvFile;
-      var downloadLink;
- 
-      // CSV file
-      csvFile = new Blob([csv], { type: "text/csv" });
- 
-      // Download link
-      downloadLink = document.createElement("a");
- 
-      // File name
-      downloadLink.download = filename;
- 
-      // Create a link to the file
-      downloadLink.href = window.URL.createObjectURL(csvFile);
- 
-      // Hide download link
-      downloadLink.style.display = "none";
- 
-      // Add the link to DOM
-      document.body.appendChild(downloadLink);
- 
-      // Click download link
-      downloadLink.click();
-    }
- 
-    //Export HTML Table to .csv File
-    function exportTableToCSV(filename) {
-      var csv = [];
-      var rows = document.querySelectorAll("table tr");
- 
-      for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
- 
-        for (var j = 0; j < cols.length; j++)
-          row.push(cols[j].innerText);
- 
-        csv.push(row.join(","));
-      }
- 
-      // Download CSV file
-      downloadCSV(csv.join("\n"), filename);
-    }
-  </script>
-</head>
- 
-<body>
-  <% include partials/header %>
-  <div class="container mt-4 animated fadeIn">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">
-            <div class="float-right">
-                <button class="btn btn-md btn-primary text-center" onclick="exportTableToCSV('tickets.csv')"><i
-                    class="fa fa-cloud-download-alt"></i> Export Data</button>
-              </div>
-            <div class="float-right" style="padding-right: 20px;">
-                <p id="total">Total Tickets: </p>
-            </div>
-          <h5>Tickets</h5>
-        </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <head>
+    <% include partials/head %>
+    <title>Your Personal Trends</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.4"></script>
+    <div id='nav-placeholderr'></div>
+    <script>
+      $.get('nav', function (data) {
+        $("#nav-placeholderr").replaceWith(data);
+      });
+    </script>
+
+
+  </head>
+
+  <body>
+    <% include partials/header %>
+    <div class="row1">
+      <div class="col-md-6">
+        <!--<div id="chart-Container1">-->
+        <canvas id="sleepChart" width="300" height="300" background-color: rgb(38,38,38);></canvas>
+        <script>
+          var timeFormat = 'MM/DD/YYYY HH:mm';
+          function newDate(days) {
+            return moment().add(days, 'd').toDate();
+          }
+          function newDateString(days) {
+            return moment().add(days, 'd').format(timeFormat);
+          }
+          var ctx = document.getElementById('sleepChart').getContext('2d');
+          var labelsSleepArray = [
+            new Date("2020-1-07").toLocaleString().split(',')[0],
+            new Date("2020-1-08").toLocaleString().split(',')[0],
+            new Date("2020-1-09").toLocaleString().split(',')[0],
+            new Date("2020-1-10").toLocaleString().split(',')[0],
+            new Date("2020-1-11").toLocaleString().split(',')[0]];
+          var dataSleepArray = [{
+            t: new Date("2020-1-07"),
+            y: 6
+          },
+          {
+            t: new Date("2020-1-08"),
+            y: 6.5
+          },
+          {
+            t: new Date("2020-1-09"),
+            y: 7
+          },
+          {
+            t: new Date("2020-1-10"),
+            y: 6.3
+          },
+          {
+            t: new Date("2020-1-11"),
+            y: 5.4
+          }
+          ];
+          var sleepChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labelsSleepArray,
+              datasets: [{
+                label: '# of Hours of Sleep',
+                fill: 'false',
+                lineTension: 0,
+                data: dataSleepArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              scales: {
+                xaXes: [{
+                  type: 'time',
+                  time: {
+                    displayFormats: {
+                      'millisecond': 'MMM DD',
+                      'second': 'MMM DD',
+                      'minute': 'MMM DD',
+                      'hour': 'MMM DD',
+                      'day': 'MMM DD',
+                      'week': 'MMM DD',
+                      'month': 'MMM DD',
+                      'quarter': 'MMM DD',
+                      'year': 'MMM DD',
+                    }
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              },
+              title: {
+                display: true,
+                text: 'Sleep Graph'
+
+              },
+              plugins: {
+                zoom: {
+                  pan: {
+                    enabled: true,
+                    mode: 'xy'
+                  },
+                  zoom: {
+                    enabled: true,
+                    mode: 'xy'
+                  }
+                }
+              },
+            }
+          });
+        </script>
       </div>
-      <div class="card-body">
-        <table id="data" class="table table-striped">
-          <tr>
-            <th>Ticket #</th>
-            <th>Student ID</th>
-            <th>First Name</th>
-            <th>Middle Initial</th>
-            <th>Last Name</th>
-            <th>Grade</th>
-            <!--<th>Guest?</th>-->
-            <th>Guest Ticket #</th>
-          </tr>
-          <% console.log(studentsData) %>
-          <% studentsData.forEach(dt=>{ %>
-          <tr>
-            <td><%= dt.ticket %></td>
-            <td><%= dt.sID %></td>
-            <td><%= dt.first %></td>
-            <td><%= dt.middle %></td>
-            <td><%= dt.last %></td>
-            <td><%= dt.grade %></td>
-            <!--<td><%= dt.guestBool %></td>-->
-            <td><%= dt.guest %></td>
-          </tr>
-          <% }) %>
-        </table>
+      <div class="col-md-6">
+        <canvas id="caloriesChart" width="300" height="300"></canvas>
+        <script>
+          var ctx = document.getElementById('caloriesChart').getContext('2d');
+          var labelsCaloriesArray = [
+            new Date("2020-1-07").toLocaleString().split(',')[0],
+            new Date("2020-1-08").toLocaleString().split(',')[0],
+            new Date("2020-1-09").toLocaleString().split(',')[0],
+            new Date("2020-1-10").toLocaleString().split(',')[0],
+            new Date("2020-1-11").toLocaleString().split(',')[0]];
+          var dataCaloriesArray = [{
+            t: new Date("2020-1-07"),
+            y: 400
+          },
+          {
+            t: new Date("2020-1-08"),
+            y: 450
+          },
+          {
+            t: new Date("2020-1-09"),
+            y: 470
+          },
+          {
+            t: new Date("2020-1-10"),
+            y: 500
+          },
+          {
+            t: new Date("2020-1-11"),
+            y: 510
+          }
+          ];
+          var caloriesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: [
+                new Date("2020-1-07").toLocaleString().split(',')[0],
+                new Date("2020-1-08").toLocaleString().split(',')[0],
+                new Date("2020-1-09").toLocaleString().split(',')[0],
+                new Date("2020-1-10").toLocaleString().split(',')[0],
+                new Date("2020-1-11").toLocaleString().split(',')[0]],
+              datasets: [{
+                label: "# of calories burnt",
+                fill: 'false',
+                lineTension: 0,
+                data: dataCaloriesArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              scales: {
+                xaXes: [{
+                  type: 'time',
+                  time: {
+                    displayFormats: {
+                      'millisecond': 'MMM DD',
+                      'second': 'MMM DD',
+                      'minute': 'MMM DD',
+                      'hour': 'MMM DD',
+                      'day': 'MMM DD',
+                      'week': 'MMM DD',
+                      'month': 'MMM DD',
+                      'quarter': 'MMM DD',
+                      'year': 'MMM DD',
+                    }
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              },
+              title: {
+                display: true,
+                text: 'Calories Graph'
+
+              },
+              plugins: {
+                zoom: {
+                  pan: {
+                    enabled: true,
+                    mode: 'xy'
+                  },
+                  zoom: {
+                    enabled: true,
+                    mode: 'xy'
+                  }
+                }
+              },
+            }
+          });
+        </script>
       </div>
     </div>
-  </div>
-</body>
- 
+    <div class="row2">
+      <div class="col-md-6">
+
+        <canvas id="weightChart" width="300" height="300"></canvas>
+        <script>
+          var ctx = document.getElementById('weightChart').getContext('2d');
+          var labelsWeightArray = [
+            new Date("2020-1-07").toLocaleString().split(',')[0],
+            new Date("2020-1-08").toLocaleString().split(',')[0],
+            new Date("2020-1-09").toLocaleString().split(',')[0],
+            new Date("2020-1-10").toLocaleString().split(',')[0],
+            new Date("2020-1-11").toLocaleString().split(',')[0]];
+          var dataWeightArray = [{
+            t: new Date("2020-1-07"),
+            y: 150
+          },
+          {
+            t: new Date("2020-1-08"),
+            y: 149.9
+          },
+          {
+            t: new Date("2020-1-09"),
+            y: 149.8
+          },
+          {
+            t: new Date("2020-1-10"),
+            y: 149.8
+          },
+          {
+            t: new Date("2020-1-11"),
+            y: 149.7
+          }
+          ];
+          var weightChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labelsWeightArray,
+              datasets: [{
+                label: '# lbs',
+                fill: 'false',
+                lineTension: 0,
+                data: dataWeightArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              scales: {
+                xaXes: [{
+                  type: 'time',
+                  time: {
+                    displayFormats: {
+                      'millisecond': 'MMM DD',
+                      'second': 'MMM DD',
+                      'minute': 'MMM DD',
+                      'hour': 'MMM DD',
+                      'day': 'MMM DD',
+                      'week': 'MMM DD',
+                      'month': 'MMM DD',
+                      'quarter': 'MMM DD',
+                      'year': 'MMM DD',
+                    }
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    min: 100,
+                    beginAtZero: true
+                  }
+                }]
+              },
+              title: {
+                display: true,
+                text: 'Weight Graph'
+
+              },
+              plugins: {
+                zoom: {
+                  pan: {
+                    enabled: true,
+                    mode: 'xy'
+                  },
+                  zoom: {
+                    enabled: true,
+                    mode: 'xy'
+                  }
+                }
+              },
+
+            }
+          });
+        </script>
+
+      </div>
+      <div class="col-md-6">
+        <canvas id="exerciseChart" width="300" height="300"></canvas>
+        <script>
+          var ctx = document.getElementById('exerciseChart').getContext('2d');
+          var labelsExerciseArray = [
+            new Date("2020-1-07").toLocaleString().split(',')[0],
+            new Date("2020-1-08").toLocaleString().split(',')[0],
+            new Date("2020-1-09").toLocaleString().split(',')[0],
+            new Date("2020-1-10").toLocaleString().split(',')[0],
+            new Date("2020-1-11").toLocaleString().split(',')[0]];
+          var dataExerciseArray = [{
+            t: new Date("2020-1-07"),
+            y: 30
+          },
+          {
+            t: new Date("2020-1-08"),
+            y: 25
+          },
+          {
+            t: new Date("2020-1-09"),
+            y: 35
+          },
+          {
+            t: new Date("2020-1-10"),
+            y: 32
+          },
+          {
+            t: new Date("2020-1-11"),
+            y: 30
+          }
+          ];
+          var exerciseChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labelsExerciseArray,
+              datasets: [{
+                label: '# of minutes exercised',
+                fill: 'false',
+                lineTension: 0,
+                data: dataExerciseArray,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+
+              scales: {
+                xaXes: [{
+                  type: 'time',
+                  time: {
+                    displayFormats: {
+                      'millisecond': 'MMM DD',
+                      'second': 'MMM DD',
+                      'minute': 'MMM DD',
+                      'hour': 'MMM DD',
+                      'day': 'MMM DD',
+                      'week': 'MMM DD',
+                      'month': 'MMM DD',
+                      'quarter': 'MMM DD',
+                      'year': 'MMM DD',
+                    }
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              },
+              title: {
+                display: true,
+                text: 'Exercise Graph'
+
+              },
+              plugins: {
+                zoom: {
+                  pan: {
+                    enabled: true,
+                    mode: 'xy'
+                  },
+                  zoom: {
+                    enabled: true,
+                    mode: 'xy'
+                  }
+                }
+              },
+            }
+          });
+        </script>
+      </div>
+    </div>
+
+
+
+  </body>
+
+  <!--
 <script>
     var text = document.getElementById("total");
     var num = $('#data tr').length-1;
     console.log(num);
     text.firstChild.nodeValue = ("Total Tickets: " + num);
 </script>
+-->
