@@ -1,5 +1,6 @@
 # Health Tracker Application
 The purpose of our project is to help people maintain and manage their health.
+Made for the Charles E. Smith Jewish Day School Community Hackathon
 
 ___
 
