@@ -1,20 +1,8 @@
-# Automated Prom Sign Up Application
-The goal of our application is to allow for the automation of the Poolesville Prom sign up process.
-
-Currently, the process is tedious as it requires students to manually enter in their student information and there is trouble communicating between different ticket sale locations.
+# Health Tracker Application
+The purpose of our project is to help people maintain and manage their health.
 
 ___
 
-__System Requirements__
-
-- [x] User Interface with Fields to enter student information
-- [x] Settings Page- Allows user to set a starting ticket number and guests quota
-- [x] Information inputted to UI will be processed by Server
-- [x] Server will write  to a NoSQL cloud database (Firebase)
-- [x] A .csv (comma separated values) file will be produced from database to input to the Sign-in Program 
-- [x] Application will be accessible from multiple devices running simultaneously
-
-___
 __Installing and Running the Application__
 
 __1. Verify that you have node installed__
@@ -27,7 +15,7 @@ v10.15.0
 
 __2. Cloning Repository__
 
-Link to github repo: https://github.com/isanjit3/SRSS-PromSignUpApp.git
+Link to github repo: https://github.com/cloud-systems/CharlesESmith-2020.git
 
 
 Open terminal in development environment (Visual Studio Code, Atom, etc.)
@@ -45,6 +33,9 @@ First, you will have to install the necessary dependencies, this can be done thr
 $ npm install
 ```
 
+Additionally, you will have to install `.dotenv`
+```
+$ npm install dotenv
 
 Once you have the repository cloned, run the command to start the server. You should see the server being hosted locally at port 3000.
 ```
