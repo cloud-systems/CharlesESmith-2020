@@ -36,6 +36,7 @@ $ npm install
 Additionally, you will have to install `.dotenv`
 ```
 $ npm install dotenv
+```
 
 Once you have the repository cloned, run the command to start the server. You should see the server being hosted locally at port 3000.
 ```
