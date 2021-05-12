@@ -16,7 +16,7 @@
     "express-fileupload": "^1.1.4",
     "firebase": "^6.0.4",
     "jsonwebtoken": "^8.5.1",
-    "nodemailer": "^6.2.1",
+    "nodemailer": "^6.4.16",
     "nodemon": "^2.0.2",
     "replace": "^1.1.0"
   }
